@@ -244,58 +244,64 @@ function openOTTPlatform(platform, title) {
   
   modalTitle.textContent = `${title} - Browse on ${getPlatformName(platform)}`;
   
+  // Define which platforms can be embedded vs external
+  const embeddablePlatforms = ['tubi', 'archive'];
+  const isEmbeddable = embeddablePlatforms.includes(platform);
+  
   let html = `
     <div class="ott-player-container">
       <button class="back-btn" onclick="showStreamingOptions(window.currentMovieId, window.currentMovieTitle)">← Back to Platforms</button>
-      <div class="ott-embed-wrapper">
   `;
   
-  // Generate embed for each platform
-  switch(platform) {
-    case 'tubi':
-      const tubiUrl = `https://tubitv.com/search?q=${encodeURIComponent(title)}`;
-      html += `<iframe src="${tubiUrl}" class="ott-iframe" title="Tubi TV"></iframe>`;
-      break;
-      
-    case 'archive':
-      html += `<div class="ott-search-results" id="archive-results">Loading search results...</div>`;
-      break;
-      
-    case 'netflix':
-      const netflixUrl = `https://www.netflix.com/search?q=${encodeURIComponent(title)}`;
-      html += `<iframe src="${netflixUrl}" class="ott-iframe" title="Netflix"></iframe>`;
-      break;
-      
-    case 'prime':
-      const primeUrl = `https://www.amazon.com/s?k=${encodeURIComponent(title)}`;
-      html += `<iframe src="${primeUrl}" class="ott-iframe" title="Prime Video"></iframe>`;
-      break;
-      
-    case 'disney':
-      const disneyUrl = `https://www.disneyplus.com/search?q=${encodeURIComponent(title)}`;
-      html += `<iframe src="${disneyUrl}" class="ott-iframe" title="Disney+"></iframe>`;
-      break;
-      
-    case 'hotstar':
-      const hotstarUrl = `https://www.hotstar.com/search?query=${encodeURIComponent(title)}`;
-      html += `<iframe src="${hotstarUrl}" class="ott-iframe" title="Disney+ Hotstar"></iframe>`;
-      break;
-      
-    case 'sonyliv':
-      const sonylivUrl = `https://www.sonyliv.com/search/${encodeURIComponent(title)}`;
-      html += `<iframe src="${sonylivUrl}" class="ott-iframe" title="SonyLiv"></iframe>`;
-      break;
-      
-    case 'sunnxt':
-      const sunnxtUrl = `https://www.sunnxt.com/search/${encodeURIComponent(title)}`;
-      html += `<iframe src="${sunnxtUrl}" class="ott-iframe" title="Sun NXT"></iframe>`;
-      break;
+  if(isEmbeddable) {
+    html += `<div class="ott-embed-wrapper">`;
+    
+    // Generate embeds for free platforms only
+    switch(platform) {
+      case 'tubi':
+        const tubiUrl = `https://tubitv.com/search?q=${encodeURIComponent(title)}`;
+        html += `<iframe src="${tubiUrl}" class="ott-iframe" title="Tubi TV" loading="lazy"></iframe>`;
+        break;
+        
+      case 'archive':
+        html += `<div class="ott-search-results" id="archive-results">Loading search results...</div>`;
+        break;
+    }
+    
+    html += `</div>`;
+  } else {
+    // External platform redirect with info
+    let platformInfo = getPlatformInfo(platform);
+    const searchUrl = generatePlatformUrl(platform, title);
+    
+    html += `
+      <div class="external-platform-container">
+        <div class="platform-info-card">
+          <div class="platform-header">
+            <h3>${getPlatformName(platform)}</h3>
+            <p class="platform-description">${platformInfo.description}</p>
+          </div>
+          
+          <div class="platform-details">
+            <p><strong>Content:</strong> ${platformInfo.content}</p>
+            <p><strong>Subscription:</strong> ${platformInfo.subscription}</p>
+            <p><strong>Quality:</strong> ${platformInfo.quality}</p>
+          </div>
+          
+          <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="open-platform-btn">
+            🔗 Open ${getPlatformName(platform)} in New Tab
+          </a>
+          
+          <p class="platform-note">
+            This platform requires visiting their website to browse and watch movies.
+            Your search term has been included in the URL for convenience.
+          </p>
+        </div>
+      </div>
+    `;
   }
   
-  html += `
-      </div>
-    </div>
-  `;
+  html += `</div>`;
   
   optionsContent.innerHTML = html;
   
@@ -303,6 +309,66 @@ function openOTTPlatform(platform, title) {
   if(platform === 'archive') {
     loadArchiveResults(title);
   }
+}
+
+function generatePlatformUrl(platform, title) {
+  const urlMap = {
+    netflix: `https://www.netflix.com/search?q=${encodeURIComponent(title)}`,
+    prime: `https://www.amazon.com/s?k=${encodeURIComponent(title)}`,
+    disney: `https://www.disneyplus.com/search?q=${encodeURIComponent(title)}`,
+    hotstar: `https://www.hotstar.com/search?query=${encodeURIComponent(title)}`,
+    sonyliv: `https://www.sonyliv.com/search/${encodeURIComponent(title)}`,
+    sunnxt: `https://www.sunnxt.com/search/${encodeURIComponent(title)}`
+  };
+  return urlMap[platform] || '#';
+}
+
+function getPlatformInfo(platform) {
+  const infoMap = {
+    netflix: {
+      description: 'World\'s leading subscription streaming service',
+      content: 'Movies, Series, Documentaries',
+      subscription: 'Paid subscription',
+      quality: '4K Ultra HD available'
+    },
+    prime: {
+      description: 'Amazon\'s streaming service with massive library',
+      content: 'Movies, Series, Originals',
+      subscription: 'Prime subscription or rental',
+      quality: '4K available'
+    },
+    disney: {
+      description: 'Disney, Pixar, Marvel, and Star Wars content',
+      content: 'Movies, Series, Originals',
+      subscription: 'Paid subscription',
+      quality: '4K available'
+    },
+    hotstar: {
+      description: 'Indian entertainment platform - Hindi, Tamil, Telugu',
+      content: 'Movies, Series, Sports, Live Events',
+      subscription: 'Free & Premium options',
+      quality: 'HD & Full HD'
+    },
+    sonyliv: {
+      description: 'Sony entertainment platform - Hindi, Tamil content',
+      content: 'Movies, Series, Sports',
+      subscription: 'Free & Premium options',
+      quality: 'HD available'
+    },
+    sunnxt: {
+      description: 'Tamil, Telugu, and South Indian content',
+      content: 'Movies, Series, Originals',
+      subscription: 'Paid subscription',
+      quality: 'HD available'
+    }
+  };
+  
+  return infoMap[platform] || {
+    description: 'Streaming platform',
+    content: 'Movies and series',
+    subscription: 'Check platform',
+    quality: 'Varies'
+  };
 }
 
 function loadArchiveResults(title) {

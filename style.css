@@ -745,6 +745,103 @@ main {
   margin: 0.5rem 0;
 }
 
+/* External Platform Container */
+.external-platform-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.platform-info-card {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(255, 107, 107, 0.1));
+  border: 2px solid rgba(78, 205, 196, 0.4);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.platform-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(78, 205, 196, 0.3);
+}
+
+.platform-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: #f8f9ff;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #4ecdc4, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.platform-description {
+  margin: 0;
+  color: #b0b0b0;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.platform-details {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.platform-details p {
+  margin: 0.8rem 0;
+  color: #d0d0d0;
+  line-height: 1.6;
+}
+
+.platform-details strong {
+  color: #4ecdc4;
+}
+
+.open-platform-btn {
+  display: block;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #4ecdc4, #3ab5ad);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+}
+
+.open-platform-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(78, 205, 196, 0.5);
+  background: linear-gradient(135deg, #3ab5ad, #2a9d98);
+}
+
+.open-platform-btn:active {
+  transform: translateY(0);
+}
+
+.platform-note {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .stream-item {
     flex-direction: column;
