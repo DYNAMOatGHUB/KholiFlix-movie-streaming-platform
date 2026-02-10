@@ -3,16 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KholiFlix - Your Movie Streaming Destination</title>
-  <meta name="description" content="Discover and stream the latest movies with KholiFlix. Your ultimate movie streaming platform." />
+  <title>KholiFlix - Your Ultimate Movie Streaming Platform</title>
+  <meta name="description" content="Discover and stream millions of movies. Your ultimate movie streaming destination." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="logo">🎬 KholiFlix</h1>
+      <p class="tagline">Explore Millions of Movies</p>
+    </div>
+  </header>
+
   <main>
-    <h1>🎬 KholiFlix</h1>
-    <p style="text-align: center; color: #a0a0a0; margin-bottom: 2rem;">Discover trending movies and latest releases</p>
-    <section id="movies"></section>
+    <div class="search-section">
+      <form class="search-form" onsubmit="searchMovies(event)">
+        <input 
+          type="text" 
+          id="search-input" 
+          class="search-input" 
+          placeholder="Search movies, actors, genres..."
+          autocomplete="off"
+        />
+        <button type="submit" class="search-btn">🔍 Search</button>
+        <button type="button" class="clear-btn" onclick="clearSearch()">Clear</button>
+      </form>
+    </div>
+
+    <section id="movies" class="movies-grid"></section>
+
+    <div id="pagination" class="pagination"></div>
   </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 KholiFlix. All rights reserved. | Powered by TMDB</p>
+  </footer>
+
   <script src="app.js"></script>
 </body>
 </html>
