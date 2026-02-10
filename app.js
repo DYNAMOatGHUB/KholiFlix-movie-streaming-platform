@@ -178,7 +178,6 @@ function generateStreamingLinks(title, year) {
   
   return {
     tubi: `https://tubitv.com/search?q=${encodedTitle}`,
-    youtube: `https://www.youtube.com/results?search_query=${encodedTitle}+full+movie+free`,
     archive: `https://archive.org/advancedsearch.php?q=title:%22${encodedTitle}%22&mediatype=movies`
   };
 }
@@ -227,17 +226,6 @@ function showStreamingOptions(movieId, title) {
       <div class="stream-info">
         <h4 class="stream-name">🎬 Tubi TV</h4>
         <p class="stream-source">10,000+ Free Movies with Ads</p>
-      </div>
-      <div class="stream-action">→ Open</div>
-    </a>
-  `;
-  
-  // YouTube option
-  html += `
-    <a href="${links.youtube}" target="_blank" rel="noopener noreferrer" class="stream-item">
-      <div class="stream-info">
-        <h4 class="stream-name">▶ YouTube</h4>
-        <p class="stream-source">Official Free & Paid Movies</p>
       </div>
       <div class="stream-action">→ Open</div>
     </a>
