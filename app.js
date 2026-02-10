@@ -26,18 +26,7 @@ async function fetchMovies(page = 1, query = '') {
   }
 }
 
-// Fetch movie videos/trailers
-async function fetchMovieVideos(movieId) {
-  try {
-    const url = `${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch videos');
-    return response.json();
-  } catch (error) {
-    console.error('Failed to fetch videos:', error);
-    return { results: [] };
-  }
-}
+
 
 function renderMovieCard(movie) {
   const posterUrl = movie.poster_path 
@@ -125,38 +114,7 @@ function updatePagination() {
   paginationContainer.innerHTML = html;
 }
 
-async function openTrailer(movieId, title) {
-  try {
-    const videoData = await fetchMovieVideos(movieId);
-    const trailer = videoData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-    
-    if (trailer && trailer.key) {
-      showTrailerModal(title, trailer.key);
-    } else {
-      alert(`🎬 No trailer available for "${title}"\n\nBut the movie is available on TMDB!`);
-    }
-  } catch (error) {
-    console.error('Error loading trailer:', error);
-    alert('Unable to load trailer. Please try again.');
-  }
-}
 
-function showTrailerModal(title, youtubeKey) {
-  const modal = document.getElementById('trailer-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const videoFrame = document.getElementById('video-frame');
-  
-  modalTitle.textContent = title;
-  videoFrame.src = `https://www.youtube.com/embed/${youtubeKey}?autoplay=1`;
-  modal.style.display = 'block';
-}
-
-function closeTrailerModal() {
-  const modal = document.getElementById('trailer-modal');
-  const videoFrame = document.getElementById('video-frame');
-  modal.style.display = 'none';
-  videoFrame.src = '';
-}
 
 // Fetch free movies from Internet Archive
 async function searchFreeMovies(title) {
