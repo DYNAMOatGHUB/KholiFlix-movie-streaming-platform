@@ -174,9 +174,14 @@ async function searchFreeMovies(title) {
 // Generate links to legal streaming services
 function generateStreamingLinks(title, year) {
   const encodedTitle = encodeURIComponent(title);
-  const titleQuery = title.replace(/[^a-zA-Z0-9]/g, ' ').trim();
   
   return {
+    netflix: `https://www.netflix.com/search?q=${encodedTitle}`,
+    prime: `https://www.amazon.com/s?k=${encodedTitle}`,
+    disney: `https://www.disneyplus.com/search?q=${encodedTitle}`,
+    hotstar: `https://www.hotstar.com/search?query=${encodedTitle}`,
+    sonyliv: `https://www.sonyliv.com/search/${encodedTitle}`,
+    sunnxt: `https://www.sunnxt.com/search/${encodedTitle}`,
     tubi: `https://tubitv.com/search?q=${encodedTitle}`,
     archive: `https://archive.org/advancedsearch.php?q=title:%22${encodedTitle}%22&mediatype=movies`
   };
@@ -220,25 +225,92 @@ function showStreamingOptions(movieId, title) {
   // Build streaming options UI
   let html = '<div class="streams-list">';
   
-  // Tubi option
+  // Global Platforms
+  html += '<h3 class="platform-category">🌍 Global Platforms</h3>';
+  
+  html += `
+    <a href="${links.netflix}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">Netflix</h4>
+        <p class="stream-source">Premium subscription required</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  html += `
+    <a href="${links.prime}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">Amazon Prime Video</h4>
+        <p class="stream-source">Prime subscription or rental</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  html += `
+    <a href="${links.disney}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">Disney+</h4>
+        <p class="stream-source">Premium subscription</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  // Indian Platforms
+  html += '<h3 class="platform-category">🇮🇳 Indian & Tamil OTT</h3>';
+  
+  html += `
+    <a href="${links.hotstar}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">Disney+ Hotstar</h4>
+        <p class="stream-source">Hindi, Tamil, Telugu & more</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  html += `
+    <a href="${links.sonyliv}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">SonyLiv</h4>
+        <p class="stream-source">Hindi, Tamil, Marathi content</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  html += `
+    <a href="${links.sunnxt}" target="_blank" rel="noopener noreferrer" class="stream-item">
+      <div class="stream-info">
+        <h4 class="stream-name">Sun NXT</h4>
+        <p class="stream-source">Tamil, Telugu & South Indian</p>
+      </div>
+      <div class="stream-action">→</div>
+    </a>
+  `;
+  
+  // Free Platforms
+  html += '<h3 class="platform-category">✨ Free with Ads</h3>';
+  
   html += `
     <a href="${links.tubi}" target="_blank" rel="noopener noreferrer" class="stream-item">
       <div class="stream-info">
         <h4 class="stream-name">🎬 Tubi TV</h4>
-        <p class="stream-source">10,000+ Free Movies with Ads</p>
+        <p class="stream-source">10,000+ Free Movies</p>
       </div>
-      <div class="stream-action">→ Open</div>
+      <div class="stream-action">→</div>
     </a>
   `;
   
-  // Internet Archive option
   html += `
     <a href="${links.archive}" target="_blank" rel="noopener noreferrer" class="stream-item">
       <div class="stream-info">
         <h4 class="stream-name">📚 Internet Archive</h4>
         <p class="stream-source">Public Domain & Creative Commons</p>
       </div>
-      <div class="stream-action">→ Open</div>
+      <div class="stream-action">→</div>
     </a>
   `;
   
