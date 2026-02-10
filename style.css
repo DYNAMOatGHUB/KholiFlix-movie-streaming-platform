@@ -343,6 +343,105 @@ main {
   font-size: 0.9rem;
 }
 
+/* Trailer Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: rgba(20, 25, 50, 0.98);
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 16px;
+  max-width: 1200px;
+  width: 90%;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  box-shadow: 0 0 60px rgba(78, 205, 196, 0.2);
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #f8f9ff;
+  font-size: 1.8rem;
+}
+
+.close-btn {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ff6b6b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #ff4757;
+  transform: scale(1.2);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  aspect-ratio: 16/9;
+}
+
+.modal-body iframe {
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 20% auto;
+  }
+
+  .modal-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+    min-height: 300px;
+  }
+
+  .modal-body iframe {
+    height: 300px !important;
+  }
+}
+
 @media (max-width: 1024px) {
   .movies-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

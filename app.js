@@ -26,6 +26,19 @@ async function fetchMovies(page = 1, query = '') {
   }
 }
 
+// Fetch movie videos/trailers
+async function fetchMovieVideos(movieId) {
+  try {
+    const url = `${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch videos');
+    return response.json();
+  } catch (error) {
+    console.error('Failed to fetch videos:', error);
+    return { results: [] };
+  }
+}
+
 function renderMovieCard(movie) {
   const posterUrl = movie.poster_path 
     ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}` 
@@ -40,7 +53,7 @@ function renderMovieCard(movie) {
         <img src="${posterUrl}" alt="${movie.title} poster" class="movie-poster" loading="lazy">
         <div class="rating-badge">${ratingPercent}%</div>
         <div class="movie-overlay">
-          <button class="watch-btn" onclick="watchMovie(${movie.id}, '${movie.title}')">
+          <button class="watch-btn" onclick="openTrailer(${movie.id}, '${movie.title.replace(/'/g, "\\'")}')">
             <span>▶</span> Watch Now
           </button>
         </div>
@@ -61,7 +74,7 @@ async function renderMovies(page = 1) {
     
     const data = await fetchMovies(page, searchQuery);
     totalPages = data.total_pages;
-    const movies = data.results.filter(m => m.poster_path); // Only show movies with posters
+    const movies = data.results.filter(m => m.poster_path);
     
     if (movies.length === 0) {
       moviesContainer.innerHTML = '<div class="error-state"><h3>No movies found</h3><p>Try a different search term</p></div>';
@@ -112,6 +125,39 @@ function updatePagination() {
   paginationContainer.innerHTML = html;
 }
 
+async function openTrailer(movieId, title) {
+  try {
+    const videoData = await fetchMovieVideos(movieId);
+    const trailer = videoData.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+    
+    if (trailer && trailer.key) {
+      showTrailerModal(title, trailer.key);
+    } else {
+      alert(`🎬 No trailer available for "${title}"\n\nBut the movie is available on TMDB!`);
+    }
+  } catch (error) {
+    console.error('Error loading trailer:', error);
+    alert('Unable to load trailer. Please try again.');
+  }
+}
+
+function showTrailerModal(title, youtubeKey) {
+  const modal = document.getElementById('trailer-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const videoFrame = document.getElementById('video-frame');
+  
+  modalTitle.textContent = title;
+  videoFrame.src = `https://www.youtube.com/embed/${youtubeKey}?autoplay=1`;
+  modal.style.display = 'block';
+}
+
+function closeTrailerModal() {
+  const modal = document.getElementById('trailer-modal');
+  const videoFrame = document.getElementById('video-frame');
+  modal.style.display = 'none';
+  videoFrame.src = '';
+}
+
 function searchMovies(event) {
   event.preventDefault();
   const input = document.getElementById('search-input');
@@ -127,9 +173,13 @@ function clearSearch() {
   renderMovies(1);
 }
 
-function watchMovie(movieId, title) {
-  alert(`🎬 Watch feature coming soon!\n\nMovie: ${title}`);
-}
+// Close modal when clicking outside
+window.addEventListener('click', (event) => {
+  const modal = document.getElementById('trailer-modal');
+  if (event.target === modal) {
+    closeTrailerModal();
+  }
+});
 
 // Initialize the app
 window.addEventListener('DOMContentLoaded', () => {
